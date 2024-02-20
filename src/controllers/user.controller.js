@@ -77,7 +77,33 @@ const postUser = async (req, res) => {
     });
   }
 };
-const patchUserById = (req, res) => {};
+const patchUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { username, roles, accountStatus } = req.body;
+    const user = await findUserById({ userId });
+    if (!user) {
+      res.status(500).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    user.name = username ?? user.username;
+    user.roles = roles ?? user.roles;
+    user.accountStatus = accountStatus ?? user.accountStatus;
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: "Update user.",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 const deleteUserById = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -88,10 +114,9 @@ const deleteUserById = async (req, res) => {
         message: "User not found.",
       });
     }
-    return res.status(200).json({
+    return res.status(203).json({
       success: true,
       message: "Delete user.",
-      data: user,
     });
   } catch (error) {
     res.status(500).json({
