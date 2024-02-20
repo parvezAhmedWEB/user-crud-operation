@@ -16,5 +16,13 @@ const findUserById = async ({ userId }) => {
     }
   );
 };
+const deleteUser = async ({ userId }) => {
+  return await User.deleteOne(
+    { _id: userId },
+    {
+      password: 0,
+    }
+  );
+};
 
-module.exports = { findUsers, findUserById };
+module.exports = { findUsers, findUserById, deleteUser };

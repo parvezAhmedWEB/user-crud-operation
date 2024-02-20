@@ -1,5 +1,9 @@
 const { postRegisterService } = require("../services/auth.service");
-const { findUsers, findUserById } = require("../services/user.service");
+const {
+  findUsers,
+  findUserById,
+  deleteUser,
+} = require("../services/user.service");
 
 const getUsers = async (_req, res) => {
   try {
@@ -74,7 +78,28 @@ const postUser = async (req, res) => {
   }
 };
 const patchUserById = (req, res) => {};
-const deleteUserById = (req, res) => {};
+const deleteUserById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await deleteUser({ userId });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Delete user.",
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   getUsers,
   getUserById,
