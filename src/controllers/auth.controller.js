@@ -5,14 +5,20 @@ const {
 
 const postRegister = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, roles, accountStatus } = req.body;
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "Invalid Data",
       });
     }
-    const user = await postRegisterService({ username, email, password });
+    const user = await postRegisterService({
+      username,
+      email,
+      password,
+      roles,
+      accountStatus,
+    });
     const data = {
       id: user._id,
       username: user.username,

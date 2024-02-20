@@ -26,7 +26,13 @@ const postLoginService = async ({ email, password }) => {
   return jwt.sign(data, key, { expiresIn: "5h" });
 };
 
-const postRegisterService = async ({ username, email, password }) => {
+const postRegisterService = async ({
+  username,
+  email,
+  password,
+  roles,
+  accountStatus,
+}) => {
   const user = await findOneUser({ email });
   if (user) {
     throw Error("User already exists");
@@ -36,6 +42,8 @@ const postRegisterService = async ({ username, email, password }) => {
     username,
     email,
     password: hashPassword,
+    roles: roles ? roles : ["STUDENT"],
+    accountStatus: accountStatus ? accountStatus : "PENDING",
   });
   const newUser = await userData.save();
   return newUser;

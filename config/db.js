@@ -9,6 +9,7 @@ const connectDB = async () => {
   } catch (error) {
     console.log(chalk.black.bgRedBright("MongoDB is not connected."));
     console.log(error);
+    process.exit(1);
   }
 };
 module.exports = connectDB;
